@@ -13,6 +13,7 @@ import retrofit2.Response
 object FoursquareVenueRepository {
 
     private const val TAG: String = "FoursquareVenueRepo"
+
     private val venueService: FoursquareVenueService =
         FoursquareRetrofitFactory.createService(FoursquareVenueService::class.java)
 

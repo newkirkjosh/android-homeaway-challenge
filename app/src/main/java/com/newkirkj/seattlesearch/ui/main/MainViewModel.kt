@@ -1,5 +1,6 @@
 package com.newkirkj.seattlesearch.ui.main
 
+import android.os.Handler
 import android.util.Log
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
@@ -19,9 +20,14 @@ class MainViewModel(
         fun launchDetail(venueSearchItem: VenueSearchItem)
     }
 
+
     private val venueSearchItems: MutableLiveData<List<VenueSearchItem>> = MutableLiveData()
     private val searchResultsVisibility: MutableLiveData<Boolean> = MutableLiveData()
     private val welcomeMessageText: MutableLiveData<String> = MutableLiveData()
+
+    // Without going through the process of implementing a real debounce rx solution, this is a quick mimic
+    // to not make a request every time the user types a character into the SearchView
+    private var queryString: String? = null
 
     fun refreshData() {
         Log.d(TAG, "refreshData hit! venueSearchItems: ${venueSearchItems.value ?: "null"}")
@@ -53,6 +59,12 @@ class MainViewModel(
     }
 
     private fun searchVenues(query: String) {
+        // Base case: If the query is empty we can clear the results and avoid the request
+        if (query.isEmpty()) {
+            updateMutableLiveData(listOf())
+            return
+        }
+
         FoursquareVenueRepository.getVenues(query, object : FoursquareVenueRepository.VenueListCompletion {
             override fun onComplete(venues: List<VenueSearchItem>, error: String?) {
                 if (error != null) {
@@ -76,15 +88,23 @@ class MainViewModel(
     // SearchView.OnQueryTextListener
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null && query.isNotEmpty()) {
-            searchVenues(query)
-        }
+        searchVenues(query ?: "")
         return false
     }
 
+    // Depending on UX, we could change the debounce rate
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText != null && newText.count() >= 2) {
-            searchVenues(newText)
+        if (!newText.isNullOrEmpty()) {
+            if (queryString != newText) {
+                queryString = newText
+            }
+            Handler().postDelayed({
+                if (queryString == newText) {
+                    searchVenues(newText)
+                }
+            }, 400)
+        } else {
+            searchVenues("")
         }
         return true  // Do nothing for now
     }
