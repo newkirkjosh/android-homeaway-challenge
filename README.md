@@ -21,5 +21,6 @@ From there select the main directory for the project and let gradle handle the r
 
 ## Notes
 
-This project will be deleted along with any API keys used after the challenge is over.
+- This project will be deleted along with any API keys used after the challenge is over.
+- A dependency injection framework was not used due to limited time and seen as slight overkill for a smaller task. If I knew the project would be growing larger than the requirements, I would used Dagger2.
  
