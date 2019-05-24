@@ -2,6 +2,7 @@ package com.newkirkj.seattlesearch.ui.venuedetail
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.util.Log
@@ -58,6 +59,8 @@ class VenueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
     }
 
     private fun setupActionBar() {
+        toolbar_layout.setExpandedTitleColor(Color.TRANSPARENT)
+        toolbar_layout.setCollapsedTitleTextColor(Color.WHITE)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         app_bar?.addOnOffsetChangedListener(this)
@@ -87,7 +90,6 @@ class VenueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
             })
             viewModel.getVenueSearchItem().observe(this, Observer<VenueSearchItem> { searchItem ->
                 // Basic Info
-                supportActionBar?.title = searchItem.name
                 venue_name?.text = searchItem.name
                 val primaryCat = searchItem.categories.first { it.primary }
                 venue_category_name?.text = primaryCat.name
