@@ -74,8 +74,10 @@ class MainActivity : AppCompatActivity(),
             searchRecyclerAdapter?.updateSearchItems(searchItems)
         })
         viewModel.getSearchResultsVisibility().observe(this, Observer {
-            search_recyclerview.visibility = if (it) View.VISIBLE else View.GONE
-            welcome_message.visibility = if (it) View.GONE else View.VISIBLE
+
+            search_recyclerview?.visibility = if (it) View.VISIBLE else View.GONE
+            if (it) fab?.show() else fab?.hide()
+            welcome_message?.visibility = if (it) View.GONE else View.VISIBLE
         })
         viewModel.getWelcomeMessage().observe(this, Observer {
             welcome_message.text = it
