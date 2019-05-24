@@ -6,7 +6,7 @@ package com.newkirkj.seattlesearch.networking.foursquare.models
  */
 object FoursquareUserlessAuth {
 
-    // Ideally we read this from a file, currently don't have the time to set this up
+    // Making the assumption that this repository, under normal circumstances would be private
     private const val clientId: String = "MUNBQ1ZTMRGRDPY5VQSIR3T1BPUXYHCFC4HMHH4ZYB2JGPRE"
     private const val clientSecret: String = "AQVN2AHZQJJQJW1FJXDW4402KR1DS2BOBCYHWFGRSWCY5CQC"
     private const val appDate: String = "20190520"
