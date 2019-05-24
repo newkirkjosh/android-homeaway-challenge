@@ -4,10 +4,9 @@
       tools:context="com.newkirkj.seattlesearch.ui.main.MainActivity">
 
     <item android:id="@+id/action_search"
-          android:title="Search"
-          android:icon="@android:drawable/ic_search_category_default"
+          android:title="@string/menu_main_search_title"
+          android:icon="@android:drawable/ic_menu_search"
           android:iconTint="@android:color/white"
-          app:actionViewClass="androidx.appcompat.widget.SearchView"
-          app:showAsAction="always"/>
-
+          app:showAsAction="always|collapseActionView"
+          app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 </menu>

@@ -14,7 +14,7 @@ interface FoursquareVenueService {
 
     @GET("venues/search")
     fun getVenues(
-        @Query("near") near: String = "Seattle,+WA",
+        @Query("ll") ll: String = "47.6062,-122.3321",
         @Query("query") query: String,
         @QueryMap auth: Map<String, String> = FoursquareUserlessAuth.authMap()
     ): Call<VenueSearchResponseWrapper>

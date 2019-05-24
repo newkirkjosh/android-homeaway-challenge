@@ -1,6 +1,8 @@
 package com.newkirkj.seattlesearch.ui.main
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -13,10 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.newkirkj.seattlesearch.R
 import com.newkirkj.seattlesearch.networking.foursquare.models.VenueSearchItem
+import com.newkirkj.seattlesearch.ui.venuedetail.VenueDetailActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(),
+    MainViewModel.MainContract,
+    VenueSearchRecyclerAdapter.VenueSearchItemClickListener {
 
     private lateinit var viewModel: MainViewModel
     private var searchRecyclerAdapter: VenueSearchRecyclerAdapter? = null
@@ -36,22 +41,23 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume hit")
+        viewModel.refreshData()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
         val searchView = menu.findItem(R.id.action_search).actionView as SearchView
-        searchView.setOnQueryTextListener(this)
+        searchView.setOnQueryTextListener(viewModel)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.action_search -> {
-                return true
-            }
+            R.id.action_search -> return true
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -62,7 +68,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        val viewModelFactory = MainViewModelFactory(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         viewModel.getVenueSearchItems().observe(this, Observer<List<VenueSearchItem>> { searchItems ->
             searchRecyclerAdapter?.updateSearchItems(searchItems)
         })
@@ -77,21 +84,28 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun setupRecyclerView() {
         if (searchRecyclerAdapter == null) {
-            searchRecyclerAdapter = VenueSearchRecyclerAdapter(listOf())
+            searchRecyclerAdapter = VenueSearchRecyclerAdapter(listOf(), this)
         }
         search_recyclerview.adapter = searchRecyclerAdapter
         search_recyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false)
     }
 
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null && query.count() > 3) {
-            viewModel.searchVenues(query)
-            return true
-        }
-        return false
+    // VenueSearchRecyclerAdapter.VenueSearchItemClickListener
+
+    override fun onItemClick(view: View, position: Int) {
+        viewModel.searchItemClicked(position)
     }
 
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true  // Do nothing for now
+    // MainViewModel.MainContract
+
+    override fun launchDetail(venueSearchItem: VenueSearchItem) {
+        Log.d(TAG, "launchDetail: for item ${venueSearchItem.id}")
+        val intent = Intent(this@MainActivity, VenueDetailActivity::class.java)
+        intent.putExtra(VenueSearchItem.EXTRA_TAG, venueSearchItem)
+        startActivity(intent)
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }

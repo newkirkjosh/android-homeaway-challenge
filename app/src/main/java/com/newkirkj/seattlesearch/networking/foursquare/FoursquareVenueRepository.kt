@@ -20,13 +20,22 @@ object FoursquareVenueRepository {
         fun onComplete(venues: List<VenueSearchItem> = listOf(), error: String? = null)
     }
 
+    // If there were more requests, we would create a queue and use a HashMap to control cancellations of requests
+    private var venueSearchRequest: Pair<String, Call<VenueSearchResponseWrapper>>? = null
+
     fun getVenues(query: String, completion: VenueListCompletion) {
         Log.d(TAG, "getVenues hit with query: $query")
-        venueService.getVenues(query = query).enqueue(object : Callback<VenueSearchResponseWrapper?> {
+        if (venueSearchRequest != null && venueSearchRequest?.first == query) {
+            return
+        }
+
+        val request = venueService.getVenues(query = query)
+        venueSearchRequest = Pair(query, request)
+        request.enqueue(object : Callback<VenueSearchResponseWrapper?> {
             override fun onFailure(call: Call<VenueSearchResponseWrapper?>, t: Throwable) {
-                // Do nothing for now
-                Log.e(TAG, "Error: $t")
+                Log.e(TAG, "Error: $t") // Do nothing for now
                 completion.onComplete(error = t.message)
+                venueSearchRequest = null
             }
 
             override fun onResponse(
@@ -40,6 +49,7 @@ object FoursquareVenueRepository {
                 } else {
                     completion.onComplete()
                 }
+                venueSearchRequest = null
             }
         })
     }

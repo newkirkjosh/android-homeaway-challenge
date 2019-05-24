@@ -1,5 +1,7 @@
 package com.newkirkj.seattlesearch.ui.main
 
+import android.annotation.SuppressLint
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +17,16 @@ import com.newkirkj.seattlesearch.utils.bind
  * Created by Joshua Newkirk on 5/20/2019.
  */
 class VenueSearchRecyclerAdapter(
-    private var venueSearchItems: List<VenueSearchItem>
+    private var venueSearchItems: List<VenueSearchItem> = listOf(),
+    private val itemClickListener: VenueSearchItemClickListener
 ) : RecyclerView.Adapter<VenueSearchRecyclerAdapter.VenueSearchItemViewHolder>() {
 
+    interface VenueSearchItemClickListener {
+        fun onItemClick(view: View, position: Int)
+    }
+
     fun updateSearchItems(venueSearchItems: List<VenueSearchItem>) {
-        this.venueSearchItems = venueSearchItems.sortedBy {
-            it.location.distance
-        }
+        this.venueSearchItems = venueSearchItems
         notifyDataSetChanged()
     }
 
@@ -34,7 +39,7 @@ class VenueSearchRecyclerAdapter(
 
     override fun onBindViewHolder(holder: VenueSearchItemViewHolder, position: Int) {
         val venueSearchItem = venueSearchItems[position]
-        holder.bind(venueSearchItem)
+        holder.bind(venueSearchItem, itemClickListener)
     }
 
     class VenueSearchItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,16 +49,28 @@ class VenueSearchRecyclerAdapter(
         private val venueCategoryIcon by itemView.bind<ImageView>(R.id.venue_category_icon)
         private val venueDistanceTo by itemView.bind<TextView>(R.id.venue_distance_to)
 
-        fun bind(venueSearchItem: VenueSearchItem) {
+        private val resources = itemView.context.resources
+
+        @SuppressLint("PrivateResource")
+        fun bind(venueSearchItem: VenueSearchItem, listener: VenueSearchItemClickListener) {
+            itemView.setOnClickListener { view ->
+                listener.onItemClick(view, adapterPosition)
+            }
             venueName.text = venueSearchItem.name
             venueSearchItem.categories.firstOrNull { it.primary }?.let {
                 venueCategoryName.text = it.name
-                Glide.with(itemView)
-                    .load(it.icon.imageUrlString())
+                Glide.with(itemView.context)
+                    .load(it.icon.imageURLString())
                     .fitCenter()
                     .into(venueCategoryIcon)
+                venueCategoryIcon.setColorFilter(
+                    resources.getColor(
+                        R.color.accent_material_light,
+                        resources.newTheme()
+                    ), PorterDuff.Mode.SRC_ATOP
+                )
             }
-            venueDistanceTo.text = venueSearchItem.location.formattedDistanceInKilometers()
+            venueDistanceTo.text = venueSearchItem.location?.formattedDistanceInKilometers()
         }
     }
 }

@@ -9,9 +9,10 @@
 
     <ImageView
             android:id="@+id/venue_category_icon"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="@dimen/venue_search_image_size"
+            android:layout_height="@dimen/venue_search_image_size"
             android:src="@drawable/ic_launcher_background"
+            android:scaleType="center"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
