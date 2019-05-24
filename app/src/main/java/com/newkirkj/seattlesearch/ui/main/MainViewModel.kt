@@ -24,7 +24,9 @@ class MainViewModel(
     private val welcomeMessageText: MutableLiveData<String> = MutableLiveData()
 
     fun refreshData() {
+        Log.d(TAG, "refreshData hit! venueSearchItems: ${venueSearchItems.value ?: "null"}")
         venueSearchItems.value?.let {
+            Log.d(TAG, "venueSearchItems: ${it.count()}")
             if (it.isNotEmpty()) {
                 updateMutableLiveData(it)
             }
@@ -74,13 +76,16 @@ class MainViewModel(
     // SearchView.OnQueryTextListener
 
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query != null && query.count() > 3) {
+        if (query != null && query.isNotEmpty()) {
             searchVenues(query)
         }
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null && newText.count() >= 2) {
+            searchVenues(newText)
+        }
         return true  // Do nothing for now
     }
 

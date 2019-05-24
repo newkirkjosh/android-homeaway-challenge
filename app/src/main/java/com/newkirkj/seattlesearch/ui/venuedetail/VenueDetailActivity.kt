@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
@@ -40,7 +39,7 @@ class VenueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                NavUtils.navigateUpFromSameTask(this)
+                onBackPressed()
                 return true
             }
             else -> super.onOptionsItemSelected(item)
@@ -131,6 +130,7 @@ class VenueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
     // VenueDetailViewModel.VenueDetailContract
 
     override fun launchExternalWebsite(intent: Intent) {
+        Log.d(TAG, "launchExternalWebsite: $intent")
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
         }

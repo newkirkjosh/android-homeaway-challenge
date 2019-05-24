@@ -12,13 +12,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/content_constraint_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipToPadding="false">
 
         <androidx.cardview.widget.CardView
                 android:id="@+id/venue_basic_info_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 app:cardBackgroundColor="@android:color/white"
                 app:cardElevation="@dimen/card_elevation"
                 app:cardUseCompatPadding="true"
@@ -31,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:minHeight="75dp"
-                    android:padding="8dp">
+                    android:padding="16dp">
 
                 <TextView
                         android:id="@+id/venue_name"
@@ -66,7 +67,6 @@
                             android:id="@+id/venue_category_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
                             android:textSize="16sp"
                             android:textColor="@android:color/secondary_text_light"
                             tools:text="Venue Category Name"/>
@@ -79,6 +79,8 @@
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintTop_toBottomOf="@+id/venue_category_container"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
@@ -108,6 +110,8 @@
                         android:orientation="horizontal"
                         android:gravity="center_vertical"
                         android:layout_marginTop="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:layout_constraintTop_toBottomOf="@+id/venue_contact_phone_container"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent">
