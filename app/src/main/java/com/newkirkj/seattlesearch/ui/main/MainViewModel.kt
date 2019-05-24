@@ -20,7 +20,6 @@ class MainViewModel(
         fun launchDetail(venueSearchItem: VenueSearchItem)
     }
 
-
     private val venueSearchItems: MutableLiveData<List<VenueSearchItem>> = MutableLiveData()
     private val searchResultsVisibility: MutableLiveData<Boolean> = MutableLiveData()
     private val welcomeMessageText: MutableLiveData<String> = MutableLiveData()
@@ -78,7 +77,7 @@ class MainViewModel(
     private fun updateMutableLiveData(venues: List<VenueSearchItem>) {
         venueSearchItems.value = venues.sortedBy { it.location?.distance }
         searchResultsVisibility.value = venues.isNotEmpty()
-        welcomeMessageText.value = if (venues.isEmpty()) {
+        welcomeMessageText.value = if (venues.isEmpty()) { // TODO: Update these to use R.string constants
             "Not enough minerals to make that request."
         } else {
             "Welcome to Seattle! Let\\'s find you something to do!"

@@ -94,4 +94,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="menu_main_search_title">Search</string>
+    <string name="seattle">Seattle</string>
 </resources>

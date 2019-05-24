@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -133,6 +134,8 @@ class VenueDetailActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLis
         Log.d(TAG, "launchExternalWebsite: $intent")
         if (intent.resolveActivity(packageManager) != null) {
             startActivity(intent)
+        } else {
+            Toast.makeText(this, "Could not launch website: ${intent.data}", Toast.LENGTH_SHORT).show()
         }
     }
 

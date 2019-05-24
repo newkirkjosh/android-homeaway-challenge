@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity(),
     }
 
     override fun onResume() {
-        super.onResume()
         Log.d(TAG, "onResume hit")
+        super.onResume()
         viewModel.refreshData()
     }
 

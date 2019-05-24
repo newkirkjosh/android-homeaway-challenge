@@ -47,7 +47,7 @@ data class VenueSearchLocation(
     }
 
     fun formattedDistanceInKilometers(): String {
-        return String.format("%.2fkm", distanceInKilometers())
+        return String.format("%.2fkm away", distanceInKilometers())
     }
 
     private fun distanceInMiles(): Float {
@@ -55,6 +55,6 @@ data class VenueSearchLocation(
     }
 
     fun formattedDistanceInMiles(): String {
-        return String.format("%.2fmi", distanceInMiles())
+        return String.format("%.2fmi away", distanceInMiles())
     }
 }
