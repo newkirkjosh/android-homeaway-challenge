@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/android-homeaway-challenge.iml" filepath="$PROJECT_DIR$/.idea/android-homeaway-challenge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/homeaway-challenge.iml" filepath="$PROJECT_DIR$/homeaway-challenge.iml" />
     </modules>
